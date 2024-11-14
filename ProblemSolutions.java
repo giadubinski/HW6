@@ -1,7 +1,7 @@
 
 /******************************************************************
  *
- *   YOUR NAME / SECTION NUMBER
+ *   Gianna Dubinski / COMP 272-001
  *
  *   This java file contains the problem solutions for the methods lastBoulder,
  *   showDuplicates, and pair methods. You should utilize the Java Collection
@@ -65,10 +65,35 @@ public class ProblemSolutions {
 
   public static int lastBoulder(int[] boulders) {
 
-      //
-      // ADD YOUR CODE HERE - DO NOT FORGET TO ADD YOUR NAME / SECTION # ABOVE
-      //
-      return -1;
+      //Priority Queue initializes stores Integer
+        //objects, pq with equation, ((a, b) -> b - a)
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a, b) -> b - a);
+
+        //For loop to initialize boulder to boulders
+        for (int boulder : boulders) {
+
+            //Adds element of boulder to pq
+            pq.offer(boulder);
+        }
+
+        //While loop to loop pq size that is greater 1
+        while (pq.size() > 1) {
+
+            //Initialized y to pq poll
+            int y = pq.poll();
+
+            //Initialized x to pq poll
+            int x = pq.poll();
+
+            //If statement to check if x and y aren't equal,
+            //if so, find the difference
+            if (x != y) {
+                pq.offer(y - x);
+            }
+        }
+
+        //Return to pq if there is remaining or 0 if empty
+        return pq.isEmpty() ? 0 : pq.peek();
   }
 
 
@@ -91,10 +116,34 @@ public class ProblemSolutions {
 
     public static ArrayList<String> showDuplicates(ArrayList<String> input) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure result is sorted in ascending order
+        //HashMap to map string and integers counts to a new HashMap
+        HashMap<String, Integer> counts = new HashMap<>();
+
+        //For loop that iterates string str to input
+        for (String str : input) {
+
+            //Updates the count using put to get the default string with an increment of 1
+            counts.put(str, counts.getOrDefault(str, 0) + 1);
+        }
+
+        //An Array list of strings that will duplicate
+        ArrayList<String> duplicates = new ArrayList<>();
+
+        //For loop to check the Map entry of String and Integer to counts of entry
+        for (Map.Entry<String, Integer> entry : counts.entrySet()) {
+
+            //If statement to check the entry of getting the value that is greater than 1
+            if (entry.getValue() > 1) {
+
+                //Adding duplicates to entry to get the key
+                duplicates.add(entry.getKey());
+            }
+        }
+
+        // Sort duplicates in order
+        Collections.sort(duplicates);
+
+        return duplicates;
 
     }
 
@@ -131,9 +180,36 @@ public class ProblemSolutions {
 
     public static ArrayList<String> pair(int[] input, int k) {
 
-        //
-        //  YOUR CODE GOES HERE
-        //
-        return new ArrayList<>();  // Make sure returned lists is sorted as indicated above
+        //HashSet to store seen Integers
+        HashSet<Integer> seen = new HashSet<>();
+
+        //TreeSet to maintain ordered pairs of Strings
+        TreeSet<String> pairs = new TreeSet<>();
+
+        //For loop to initialize num to input
+        for (int num : input) {
+
+            //Initialize complement to find pairs that sum to k
+            int complement = k - num;
+
+            //If statement to check seen contains a complement
+            if (seen.contains(complement)) {
+
+                //Initializes smaller to make complement num of smaller number first
+                int smaller = Math.min(num, complement);
+
+                //Initializes smaller to make complement num of larger number first
+                int larger = Math.max(num, complement);
+
+                //Pairs will add to the formatted String with the smaller and larger values
+                pairs.add(String.format("(%d, %d)", smaller, larger));
+            }
+
+            //adds num to seem
+            seen.add(num);
+        }
+
+        //Return to the ArrayList of pairs
+        return new ArrayList<>(pairs);
     }
 }
